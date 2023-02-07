@@ -1,0 +1,152 @@
+---
+title: "Homework 1"
+author: "Elikem Asudo Tsatsu Gale-Zoyiku"
+date: "2023-01-25"
+output: word_document
+---
+
+```{r setup, message = FALSE}
+library(readr)
+StudentsData <- read.delim("C:/Users/egale/OneDrive - Ashesi University/Desktop/Statistics with Probability/StudentsData.txt")
+
+```
+
+### ###Question 1
+
+```{r Question 1, fig.height=10, fig.width=15}
+#a.
+t = table(StudentsData$Major)
+prop = prop.table(t)
+percent = prop.table(t)*100
+pf = round(percent,2)
+lbl = paste(c(" BA"," CS"," MIS"),pf,"%",sep=" = ")
+ttl = paste(c('Percentage of Majors of Statistics Students'))
+pie(t,label=lbl,main=ttl)
+
+#c
+t1 <- table(StudentsData$Comfortable_classmates)
+comfort <- factor(StudentsData$Comfortable_classmates, levels = c("Very comfortable","Somewhat comfortable","Neither comfortable nor uncomfortable","Somewhat uncomfortable","Very uncomfortable"))
+t2<-table(comfort)
+barplot(100*t2/length(comfort), main = "How Comfortable Students taking Statistics are with their Classmates", col ="green", ylab = "Percentages",xlab='Levels of Comfort', ylim=c(0,50))
+abline(h=(seq(0,50,2)), col="lightgray", lty="dotted")
+
+```
+
+#a.
+
+**218** students are taking Statistics this semester.
+
+**42.66%** of students in the Statistics class are **BA** students.
+
+**41.28%** of students taking Statistics are **CS** students.
+
+**16.06%** of students taking Statistics are **MIS** majors.
+
+### ###Question 2
+
+```{r Question 2, fig.height=10, fig.width=15}
+hist(StudentsData$Expenditure, col='lightblue', main='Distribution of the Weekly Expenditure of Students taking Statistics', xlab='Weekly Expenditure', ylab='Number of Students',breaks=50)
+summary(StudentsData$Expenditure)
+IQR(StudentsData$Expenditure)
+sd(StudentsData$Expenditure)
+#USING a boxplot to check for outliers in the distribution
+boxplot(StudentsData$Expenditure,horizontal = TRUE)
+
+hist(StudentsData$Age, col='navyblue', main='Distribution of the Age of Students taking Statistics', xlab='Ages', ylab='Number of Students',xlim=c(16,26))
+summary(StudentsData$Age)
+IQR(StudentsData$Age)
+#USING a boxplot to check for outliers in the distribution
+boxplot(StudentsData$Age,horizontal = TRUE,col = 'blue')
+
+```
+
+The distribution of the weekly expenditure of students taking statistics is skewed to the left while the distribution of their ages is skewed right. This is because the distribution of the weekly expenditure has its mean<median<mode while the distribution of age has its mean>median and mode. The weekly expenditure distribtion has an IQR of 276.25 cedis whiles the age distribution has an IQR of 1. The weekly expenditure distribtion has a median of 240 cedis while the age distribution has a median of 19 years. The age distribution has approximately 5 outliers while the weekly expenditure distribution has no outliers.
+
+### ###Question 3
+
+```{r Question 3, fig.height=10, fig.width=15}
+
+var=c(91,94,97,100,102,102,103,108,111,112,115,115,116,116,117,117,117,122,122,123,124,128,129,130,132)
+a = summary(var);a
+IQR(var)
+l1 <- (quantile(var,0.25))
+l2 <- (quantile(var,0.75))
+ir <- IQR(var)
+lower <- l1 - 1.5*(ir);lower
+upper <- l2 + 1.5*(ir);upper
+
+```
+
+a.  91, 94, 97, 100, 102
+
+b.  116 Cedis
+
+c.  107 cedis, because it appears thrice in the dataset, more than any other value.
+
+d.  The middle 50% of customers paid between 103 cedis and 122 cedis as fees.
+
+e.  19
+
+f.  There are no outliers in this dataset, as calculated in the code chunk above. There is no value below l1 (74.50 cedis) or l2 (150.50 cedis).
+
+### ###Question 4
+
+```{r Question 4, fig.height=10, fig.width=15}
+#a.
+boxplot(StudentsData$Expenditure ~ StudentsData$Cafeteria,main="Weekly Expenditure of Statistics Students based on Cafeteria",ylab="Weekly Expenditure in Ghana Cedis",xlab='Choice of Cafeteria',col='green')
+
+#b. 
+tapply(StudentsData$Expenditure,StudentsData$Cafeteria,fivenum)
+
+```
+
+c.  In this box and whisker plot, the relationship between students' choice of cafeteria, and their weekly expenditure is explored. Choice of cafeteria is the categorical and explanatory variable, and weekly expenditure is the quantitative and response variable. The question 'Can a student's weekly expenditure be explained by their prefered cafteria?' is answered. The median weekly expenditure of students who prefer Akornor is 250 cedis, 200 cedis for BigBen, and 240 cedis for Muchies. However, 25% of students who prefer Munchies or BigBen generally spend more than students who prefer Akornor (except for one outlier who spends more than every other student in the dataset). The weekly expenditure of students who prefer Munchies vary a lot more than the students who prefer the other cafeterias.
+
+### ###Question 5
+
+```{r Question 5, fig.height=10, fig.width=15}
+
+#a,b.     
+plot(col='navyblue',x = StudentsData$Age,
+y = StudentsData$Expenditure,         
+xlab = "Age (Years)",
+ylab = "Weekly Expenditure in Ghana Cedis",
+xlim = c(16, 26),
+ylim = c(0, max(StudentsData$Expenditure)),main = "Relationship between Age and Weekly Expenditure of Statistics Students") + abline(lm(StudentsData$Expenditure ~ StudentsData$Age, data= StudentsData))
+
+#c.
+cor(StudentsData$Age,StudentsData$Expenditure)
+```
+
+d.  Based on the pattern observed in the scatter plot and the value for the correlation coefficient (0.2679), there does appear to be a linear relationship between the two variables, age and expenditure. The direction of the relationship is positive, meaning that as one variable increases, the other variable also tends to increase. However, the strength of the relationship is weak, as indicated by the low correlation coefficient value. Additionally, there are outliers present in the data.
+
+### ###Question 6
+
+```{r Question 6, fig.height=7.5, fig.width=15}
+
+#a.
+GradeA= c(588, 579, 585, 580, 583)
+meanA = mean(GradeA);meanA
+medianA = median(GradeA);medianA
+IQR(GradeA)
+standardDA = sd(GradeA);standardDA
+
+GradeB = c( 570, 574, 572, 571, 578)
+meanB = mean(GradeB);meanB
+medianB = median(GradeB);medianB
+IQR(GradeB)
+standardDB = sd(GradeB);standardDB
+
+#c.
+GradeB = c( 570, 574, 572, 571, 588)
+meanB = mean(GradeB);meanB
+medianB = median(GradeB);medianB
+a = IQR(GradeB)
+standardDB = sd(GradeB);standardDB
+b = quantile(GradeB,0.75)
+c = 1.5*(a) + b
+```
+
+b.  Grade B. The mean thickness of the Grade B tires is 573mm, and the median thickness is 572 mm. These values are closer to the expected 575mm than the Grade A tires, which have a mean and median of 583mm. Additionally, the standard deviation of Grade B tires is 3.16mm, which is less than the standard deviation of Grade A tires, 3.67mm. This means that the Grade B tires deviate less from the mean than the Grade A tires do. Also, the inter-quartile range of Grade A is larger than the inter-quartile range of Grade B. Hence, Grade B tires have higher consistency and are closer to the expected 575mm than Grade A.
+
+c.  My responses for (a) will change in that the mean and standard deviation for Grade B increase to 575mm and 7.42 mm. The median does not change. My responses for (b) will not change in that because the presence of 588mm in the dataset is an outlier. This can be confirmed by computing the inter-quartile range of Grade B, and using the interquartile rule.The operations manager of Hankook would be better served by ignoring the outlier. In the case where the outlier is kept, the operations manager would be best served by using comparing the median values.
