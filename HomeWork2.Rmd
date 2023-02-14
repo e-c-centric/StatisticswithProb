@@ -90,7 +90,7 @@ In this line, we are creating a new data frame called popRegions which includes 
 #2f.
 
 ```{r Question 2f.}
-hist(popRegions$Population, main="Histogram of Populous Regions in Ghana", xlab="Population", ylab="Frequency", breaks=50, col = c('pink','blue','green','yellow','purple','orange','navyblue','aquamarine'))
+hist(popRegions$Population, main="Histogram of Populous Regions in Ghana", xlab="Population", ylab="Frequency", breaks=100, col = c('pink','blue','green','yellow','purple','orange','navyblue','aquamarine'))
 
 
 mean_pop = mean(popRegions$Population)
@@ -195,7 +195,7 @@ SilverStar towers is the worst performing branch because their average waiting t
 # Salaries of workers in SilverStar Tower Branch
 silverstar_salaries <- c(200, 350, 220, 180, 500, 320, 370, 350, 300, 310)
 silverstar_mean <-mean(silverstar_salaries)
-silverstar_mean <- sd(silverstar_salaries)
+silverstar_sd <- sd(silverstar_salaries)
 
 # Salaries of workers in Accra Mall Branch
 accra_mall_salaries <- c(1200, 2000, 3500, 3000, 2700, 2450, 1900, 2100, 2200, 2600)
