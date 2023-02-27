@@ -1,0 +1,316 @@
+---
+title: "Homework 3"
+author: "Elikem Asudo Tsatsu Gale-Zoyiku"
+date: "2023-02-22"
+output:
+  word_document: default
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r setup, message = FALSE}
+load("C:/Users/egale/OneDrive - Ashesi University/Desktop/Statistics with Probability/auto_premiums.RData")
+```
+
+##Question 1
+
+```{r Question 1}
+# Sample size
+n <- 50
+
+# Number of people with each blood type
+type_o <- 21
+type_a <- 22
+type_b <- 5
+type_ab <- 2
+
+#a. Probability of having type O blood
+prob_o <- type_o/n
+prob_o
+
+#b. Probability of having type A or type B blood
+prob_a_b <- (type_a + type_b)/n
+prob_a_b 
+
+#c. Probability of having neither type A nor type O blood
+prob_not_a_o <- 1 - (type_a + type_o)/n
+prob_not_a_o 
+
+#d. Probability of not having type AB blood
+prob_not_ab <- 1 - type_ab/n
+prob_not_ab
+```
+
+#1a.
+
+The probability that a person has type O blood is 0.42.
+
+#1b.
+
+The probability that a person has type A or type B blood is 0.54.
+
+#1c.
+
+The probability that a person has neither type A nor type O blood is 0.14.
+
+#1d.
+
+The probability that a person does not have type AB blood is 0.96.
+
+##Question 2
+
+```{r Question 2}
+# Total number of students
+n <- 35
+
+# Number of female students
+n_female <- 8 + 15  
+# there are 8 females from Oxford and 15 from ASU
+
+#a.probability that the student is a female
+prob_female <- n_female/n
+prob_female  
+
+#b. Probability that the student is from ASU given that they are female
+# there are 15 females from ASU
+n_female_asu <- 15  
+prob_asu_given_female <- n_female_asu/n_female
+prob_asu_given_female
+```
+
+#2a.
+
+The probability that a student selected at random is female is 0.657.
+
+#2b.
+
+The probability that the selected student comes from Arizona State University given that they are female is 0.652.
+
+##Question 3
+
+```{r Question 3}
+prob_2_defective <- (choose(4, 2) * choose(20,2)) / choose(24, 4)
+prob_2_defective 
+
+prob_none_defective <- choose(20, 4) / choose(24, 4)
+prob_none_defective  
+
+prob_all_defective <- (choose(4,4)* choose(20,0)) / choose(24,4)
+prob_all_defective
+
+prob_at_least_1_defective <- 1 - prob_none_defective
+prob_at_least_1_defective  
+```
+
+#3a.
+
+The probability that exactly two of the four screws are defective is 0.107.
+
+#3b.
+
+The probability that none of the screws sold are defective is 0.456.
+
+#3c.
+
+The probability that all of the four screws are defective is 0.00094 (practically impossible).
+
+#3d.
+
+The probability that at least one of the four screws sold at random is defective is 0.544.
+
+##Question 4
+
+```{r Question 4}
+# Create a frequency table of days stayed
+days_stayed <- c(3, 4, 5, 6, 7)
+freq <- c(15, 32, 56, 19, 5)
+df <- data.frame(days_stayed, freq)
+
+# Calculate probabilities
+# a. A patient stayed exactly 5 days.
+prob_a <- df$freq[df$days_stayed == 5] / sum(df$freq)
+prob_a
+
+# b. A patient stayed less than 6 days.
+prob_b <- sum(df$freq[df$days_stayed < 6]) / sum(df$freq)
+prob_b
+
+# c. A patient stayed at most 4 days.
+prob_c <- sum(df$freq[df$days_stayed <= 4]) / sum(df$freq)
+prob_c
+
+# d. A patient stayed at least 5 days.
+prob_d <- sum(df$freq[df$days_stayed >= 5]) / sum(df$freq)
+prob_d
+```
+
+#4a.
+
+The probability that a patient stayed exactly 5 days at the hospital is 0.441.
+
+#4b.
+
+The probability that a patient spends less than 6 days at the hospital is 0.811.
+
+#4c.
+
+The probability that a patient stayed at most 4 days at the hospital is 0.370.
+
+#4d.
+
+The probability that a patient stayed at least 5 days at the hospital is 0.630.
+
+##Question 5
+
+```{r Question 5a}
+# Formula: probability = favorable outcomes / total outcomes
+
+# Define probabilities
+P_W <- 0.04 # probability that a car needs warranty repair
+P_US <- 0.60 # probability that car is manufactured by a U.S.-based company
+P_W_and_US <- 0.025 # probability that car needs warranty repair and is manufactured by a U.S.-based company
+P_not_W <- 1 - 0.04
+
+#5a.
+#Probability that a car needs warranty repair given that it was manufactured by a US-based company
+
+#P(B|A) = P(A ∩ B) / P(A)
+P_needing_repair_given_US <- (P_W_and_US) / P_US
+P_needing_repair_given_US
+
+
+# Probability that a car needs warranty repair given that it was not manufactured by a US-based company
+
+# P(W and not US)
+P_W_and_not_US <- P_W - P_W_and_US
+
+# P(not US)
+P_not_US <- 1 - P_US
+
+# P(W | not US)
+P_W_given_not_US <- P_W_and_not_US / P_not_US
+
+P_W_given_not_US
+
+
+# Are need for warranty repair and location of the company manufacturing the car statistically independent?
+
+# Formula for independent events: P(A and B) = P(A) * P(B)
+P_W_and_US == P_W * P_US
+```
+
+#5a.
+
+The probability that the car needs warranty repair given that it is manufactured in the United States is 0.042.
+
+#5b.
+
+The probability that the car needs warranty repair given that it is not manufactured in the United States is 0.038.
+
+#5c.
+
+Need for warranty repair and location of the company manufacturing the car are statistically dependent because the probability that a new car needs warranty repair and was manufactured in the US is not equal to the probability that a new car needs warranty repair and that it was manufactured in the US.
+
+##Question 6
+
+```{r Question 6}
+n_women <- 7
+n_men <- 5
+n_choose_women <- 3
+n_choose_men <- 2
+
+n_possibilities <- choose(n_women, n_choose_women) * choose(n_men, n_choose_men)
+n_possibilities
+
+#b
+n_digits <- 6
+n_positions <- 4
+
+n_possibilities <- n_digits ^ n_positions
+n_possibilities
+```
+
+#6a.
+
+There are 350 possibilities of forming a committee with 3 women and 2 men from the club out of 7 women and 5 men.
+
+#6b.
+
+There are 1296 ways different cards can be made if she uses the digits 1, 2, 3, 4, 5, 6 and repetitions are permitted.
+
+##Question 7
+
+```{r Question 7, fig.height=10, fig.width=10}
+#7a.
+boxplot(data$Premium,main="Plot of Monthly Insurance Premiums for 50 randomly selected US adults",xlab='Monthly Insurance Premium',col='green',horizontal = TRUE)
+```
+
+#7b.
+
+The distribution of auto insurance premiums is roughly symmetric because the median line seems to lie perfectly in between the 1st and 3rd quantile lines.
+This means that the distribution is evenly spread about the median.
+I expect the distribution to follow the empirical rule, because from the boxplot, there don't seem to be outliers in the distribution.
+This means that the mean will more accurately describe the center of the data.
+The accuracy of the mean, and the absence of outliers, means that the standard deviation will be a more accurate description of the spread of the distribution.
+As such, I expect the distribution to follow the empirical rule.
+
+#7c.
+
+```{r Question 7c.}
+#7c.
+summary(data$Premium)
+mean(data$Premium)
+sd(data$Premium)
+```
+
+The mean of the sample distribution of auto premiums is USD 62.98, and the standard deviation is USD 15.18.
+The mean of 62.98 indicates that the average auto premium in the distribution is approximately USD 63.
+The standard deviation of 15.17852 indicates that the auto premiums in the distribution are spread out around the mean, with most premiums falling within one standard deviation of the mean, or between approximately USD 48 and USD 79.
+This provides a measure of variability for the distribution.
+
+#7d.
+
+```{r Question 7d.}
+# Calculate the mean and standard deviation
+mean_premiums <- mean(data$Premium)
+sd_premiums <- sd(data$Premium)
+
+# Calculate the range within one standard deviation of the mean
+lower_bound <- mean_premiums - sd_premiums
+upper_bound <- mean_premiums + sd_premiums
+
+# Calculate the probability that a randomly selected insurance premium falls within this range
+#P(lower_bound < X < upper_bound)
+prob_within_one_sd <- pnorm(upper_bound, mean = mean_premiums, sd = sd_premiums) - pnorm(lower_bound, mean = mean_premiums, sd = sd_premiums)
+
+prob_within_one_sd
+```
+
+The probability that a randomly chosen premium falls within 1 standard deviation of the mean premium is 0.683.
+This is extremely close to what I expected based on the empirical rule, because for an empirical distribution, 68 percent of all values in the distribution fall within 1 standard deviation of the mean.
+This implies that the probability that a randomly picked value from a distribution that follows the empirical rule, falls withing 1 standard deviaton of the mean, is 68% or 0.68.
+This is close to the value that I calculated.
+
+#7e.
+
+```{r Question 7e.}
+# Calculate the mean and standard deviation
+mean_premiums <- mean(data$Premium)
+sd_premiums <- sd(data$Premium)
+
+# Calculate the range within one standard deviation of the mean
+lower_bound <- mean_premiums - 2*sd_premiums
+upper_bound <- mean_premiums + 2*sd_premiums
+
+# Calculate the probability that a randomly selected insurance premium falls within this range
+#P(lower_bound < X < upper_bound)
+prob_within_two_sd <- pnorm(upper_bound, mean = mean_premiums, sd = sd_premiums) - pnorm(lower_bound, mean = mean_premiums, sd = sd_premiums)
+
+prob_within_two_sd
+```
+
+The probability that a randomly chosen premium falls within 2 standard deviations of the mean premium is 0.954.
+This is extremely close to what I expected based on the empirical rule, because for an empirical distribution, 95 percent of all values in the distribution fall within 2 standard deviation of the mean.
+This implies that the probability that a randomly picked value from a distribution that follows the empirical rule, falls within 2 standard deviations of the mean, is 95% or 0.95.
+This is close to the value that I calculated for the probability that a randomly chosen premium falls within 2 standard deviations of the mean.
