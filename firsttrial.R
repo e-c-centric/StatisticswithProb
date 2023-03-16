@@ -58,3 +58,15 @@ summary(random_sample$Verbal)
 
 summary(population$Age)
 summary(random_sample$Age)
+x=birthweight$birthweight
+C=0.99
+z=qnorm((1+C)/2)
+sigma=500
+n=length(x)
+xbar=mean(x)
+xbar-z*(sigma/sqrt(n))
+xbar+z*(sigma/sqrt(n))
+n=length(support$opinion);n
+t=table(support$opinion);t
+prop.test(t[1],n,conf.level=0.95)
+prop.test(t[2],n,conf.level=0.95)$conf.int
