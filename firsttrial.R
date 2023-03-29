@@ -70,3 +70,21 @@ n=length(support$opinion);n
 t=table(support$opinion);t
 prop.test(t[1],n,conf.level=0.95)
 prop.test(t[2],n,conf.level=0.95)$conf.int
+hist(data$Verbal)
+summary(data$Verbal)
+z = (mean(na.omit(data$Verbal)) - 580) / (111/sqrt(length(na.omit(data$Verbal)))); z
+pnorm(z)
+pnorm(z, lower.tail=FALSE)
+2*pnorm(abs(z), lower.tail=FALSE)
+lower=qnorm(0.025, mean=596.7, sd=111/sqrt(286)); lower
+upper=qnorm(0.975, mean=596.7, sd=111/sqrt(286)); upper
+tbl = table(data$Cell); tbl
+100*tbl/sum(tbl)
+pie(tbl)
+summary(data$Cell)
+n = length(na.omit(data$Cell)); n
+np = length(na.omit(data$Cell[data$Cell == "yes"])); np
+np = length(na.omit(data$Cell[data$Cell == "no"])); np
+prop.test(np, n, 0.8, alternative = "less", correct=FALSE)
+hist(data$Sleep)
+summary(data$Sleep)
