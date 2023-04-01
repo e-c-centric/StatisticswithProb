@@ -10,9 +10,3 @@ library(descr)
 freq(myData)
 freq(myData)
 
-myGhanaData$Q78A_GHA<-as.numeric(myGhanaData$Q78A_GHA)
-hist(myGhanaData$Q78A_GHA, col="hotpink")
-
-myGhanaData$Q95A<-as.numeric(myGhanaData$Q95A)
-hist(myGhanaData$Q95A, col="hotpink")
-#"WORKFEELEVL",
