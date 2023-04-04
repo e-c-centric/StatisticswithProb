@@ -7,48 +7,169 @@ output: word_document
 ```{r setup, message = FALSE}
 ```
 
-## **Research Questions**
+## **Research Question**
 
-**What is the relationship between exercise frequency and mental health status?**
+**Is there an association between the sexual orientation of cis-males, depression levels, and their income? Can education explain any association if there is?**
 
-Explanatory Variable: Exercise Frequency (Quantitative)
-Response Variable: Mental Health Status (Categorical)
+Explanatory Variables: Gender (Categorical), Sexual Orientation (Categorical), and Educational attainment (categorical)
+Response Variables: Depression levels (Categorical), Anxiety levels (Categorical), Ratio of income to poverty level (Categorical)
 
 ### 1. Load data set(s) and libraries
 ```{r 1}
 load("C:/Users/egale/OneDrive - Ashesi University/Desktop/Statistics with Probability/IPUMS_NHIS.RData")
 library(descr)
 library(stats)
+library(dplyr)
 ```
 
 
 ### 2. Create variable subset
 ```{r 2}
-vars=c("SEX","SEXORIEN","EDUC","MAXEDUC","WORFREQ","DEPFEELEVL","WORRX","DEPRX","DEPFREQ","POVLEV","POVERTY")
-myData = IPUMS_NHIS[vars]
-
-str(myData)
-myData<-as.data.frame(myData)
-str(myData)
+vars=c("AGE","SEX","SEXORIEN","EDUC","DEPFEELEVL","DEPFREQ","POVERTY","WORFEELEVL","WORFREQ")
+myHealthData = IPUMS_NHIS[vars]
+str(myHealthData)
+myHealthData<-as.data.frame(myHealthData)
+str(myHealthData)
 
 ```
 
 ### 3. Data management I: check for and recode errors and NAs
 ```{r 3}
+myHealthData$Gender <- rep(NA,nrow(myHealthData))
+myHealthData$Gender[myHealthData$SEX==1] <- 'Male'
+myHealthData$Gender[myHealthData$SEX==2] <- 'Female'
+
+
+myHealthData$WorkingAge <- rep(NA,nrow(myHealthData))
+myHealthData$WorkingAge[myHealthData$AGE<=18] <- 'Not working age'
+myHealthData$WorkingAge[myHealthData$AGE>18 & myHealthData$AGE<997] <- 'Working age'
+
+
+myHealthData$Orientation <- rep(NA,nrow(myHealthData))
+myHealthData$Orientation[myHealthData$SEXORIEN==1] <- 'Not Straight'
+myHealthData$Orientation[myHealthData$SEXORIEN==3] <- 'Not Straight'
+myHealthData$Orientation[myHealthData$SEXORIEN==4] <- 'Not Straight'
+myHealthData$Orientation[myHealthData$SEXORIEN==2] <- 'Straight'
+
+myHealthData$EDUC<-as.numeric(myHealthData$EDUC)
+myHealthData$Education <- rep(NA, nrow(myHealthData))
+myHealthData$Education[myHealthData$EDUC < 112] <- "No high school"
+myHealthData$Education[myHealthData$EDUC >= 112 & myHealthData$EDUC<116] <- "Some high school"
+myHealthData$Education[myHealthData$EDUC >= 200 & myHealthData$EDUC<=202] <- "High school diploma or equivalent"
+myHealthData$Education[myHealthData$EDUC >= 300 & myHealthData$EDUC<=301] <- "Some college"
+myHealthData$Education[myHealthData$EDUC >= 302 & myHealthData$EDUC<=303] <- "Associate's Degree"
+myHealthData$Education[myHealthData$EDUC == 400] <- "Bachelor's Degree"
+myHealthData$Education[myHealthData$EDUC == 504] <- "Other Degree"
+myHealthData$Education[myHealthData$EDUC >= 500 & myHealthData$EDUC<=503] <- "Postgraduate"
+
+myHealthData$DepressionFrequency <- rep(NA, nrow(myHealthData))
+myHealthData$DepressionFrequency[myHealthData$DEPFREQ == 1] <- "Daily"
+myHealthData$DepressionFrequency[myHealthData$DEPFREQ == 2] <- "Weekly"
+myHealthData$DepressionFrequency[myHealthData$DEPFREQ == 3] <- "Monthly"
+myHealthData$DepressionFrequency[myHealthData$DEPFREQ == 4] <- "Rarely"
+myHealthData$DepressionFrequency[myHealthData$DEPFREQ == 5] <- "Never"
+
+
+myHealthData$DepressionLevel <- rep(NA, nrow(myHealthData))
+myHealthData$DepressionLevel[myHealthData$DEPFEELEVL == 1] <- "A lot"
+myHealthData$DepressionLevel[myHealthData$DEPFEELEVL== 2] <- "A little"
+myHealthData$DepressionLevel[myHealthData$DEPFEELEVL == 3] <- "Somewhere in between"
+myHealthData$DepressionLevel[myHealthData$DEPFEELEVL == 0] <- "Skipped"
+
+
+myHealthData$WorryFrequency <- rep(NA, nrow(myHealthData))
+myHealthData$WorryFrequency[myHealthData$WORFREQ == 1] <- "Daily"
+myHealthData$WorryFrequency[myHealthData$WORFREQ == 2] <- "Weekly"
+myHealthData$WorryFrequency[myHealthData$WORFREQ == 3] <- "Monthly"
+myHealthData$WorryFrequency[myHealthData$WORFREQ == 4] <- "Rarely"
+myHealthData$WorryFrequency[myHealthData$WORFREQ == 5] <- "Never"
+
+
+myHealthData$WorryLevel <- rep(NA, nrow(myHealthData))
+myHealthData$WorryLevel[myHealthData$WORFEELEVL == 1] <- "A lot"
+myHealthData$WorryLevel[myHealthData$WORFEELEVL== 2] <- "A little"
+myHealthData$WorryLevel[myHealthData$WORFEELEVL == 3] <- "Somewhere in between"
+myHealthData$WorryLevel[myHealthData$WORFEELEVL == 0] <- "Skipped"
+
+
+myHealthData$PovertyRatio <- rep(NA, nrow(myHealthData))
+myHealthData$PovertyRatio[myHealthData$POVERTY<=14] <- "Below the poverty line"
+myHealthData$PovertyRatio[myHealthData$POVERTY<=25 & myHealthData$POVERTY>=20] <- "Between 1 to 1.99 units above the poverty line"
+myHealthData$PovertyRatio[myHealthData$POVERTY<=32 & myHealthData$POVERTY>=31] <- "Between 2 to 2.99 units above the poverty line"
+myHealthData$PovertyRatio[myHealthData$POVERTY<=34 & myHealthData$POVERTY>=33] <- "Between 3 to 3.99 units above the poverty line"
+myHealthData$PovertyRatio[myHealthData$POVERTY<=36 & myHealthData$POVERTY>=35] <- "Between 4 to 4.99 units above the poverty line"
+myHealthData$PovertyRatio[myHealthData$POVERTY==37] <- "5 units and above the poverty line"
+
 ```
 
 ### 4. Data management II: further subset and create secondary variable
 ```{r 4}
+# Subset the data frame to take out observations below the working age
+myHealthData <- myHealthData[myHealthData$WorkingAge == "Working age", ]
+
 ```
 
 ### 5. Descriptive statistics (sample means, standard deviations, proportions) and univariate displays
 ```{r 5}
+freq(myHealthData$Gender, ylab="Frequency",xlab="Sex",ylim=c(0,70000),col=c("hotpink","blue"))
+freq(myHealthData$WorkingAge, ylab="Frequency",xlab="Working Age",ylim=c(0,100000),col=c("pink","blue"))
+freq(myHealthData$Orientation,ylab="Frequency",xlab="Sexual Orientation",ylim=c(0,100000), col = c("blue","yellow"))
+freq(myHealthData$Education,ylab="Frequency",xlab="Highest Level of Education Obtained",ylim=c(0,50000),col=c("blue","yellow","green","violet","cyan","magenta"))
+freq(myHealthData$DepressionFrequency,ylab="Frequency",xlab="How often people feel depressed",ylim=c(0,70000),col=c("blue","yellow","green","violet","cyan","magenta"))
+freq(myHealthData$DepressionLevel,ylab="Frequency",xlab="How Severe is the depression, if depression is experienced",ylim=c(0,70000),col=c("blue","yellow","green","violet","cyan","magenta"))
+freq(myHealthData$WorryFrequency,ylab="Frequency",xlab="How often people feel anxious",ylim=c(0,45000),col=c("blue","yellow","green","violet","cyan","magenta"))
+freq(myHealthData$WorryLevel,ylab="Frequency",xlab="How severe is anxiety, if anxiety is experienced",ylim=c(0,60000),col=c("blue","yellow","green","violet","cyan","magenta"))
+freq(myHealthData$PovertyRatio,ylab="Frequency",xlab="Ratio of income to poverty line",ylim=c(0,35000),col=c("blue","yellow","green","violet","cyan","magenta"))
+
+t<-table(myHealthData$Gender)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$WorkingAge)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$Orientation)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$Education)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$DepressionFrequency)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$DepressionLevel)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$WorryFrequency)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$WorryLevel)
+p<-prop.table(t)*100;p
+
+t<-table(myHealthData$PovertyRatio)
+p<-prop.table(t)*100;p
+
+
+
 ```
 
 ### 6. Bivariate tables and graphs
-```{r 6}
-```
+```{r 6, fig.height=10, fig.width=10}
+tab1<-table(myHealthData$Gender,myHealthData$PovertyRatio)
+prob_tab1<-round(prop.table(tab1,2),2)*100
+barplot(prob_tab1,main="Proportion of people in various levels above the poverty line by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab1),ylim=c(0,70))
 
+tab2<-table(myHealthData$Orientation,myHealthData$PovertyRatio)
+prob_tab2<-round(prop.table(tab2,2),2)*100
+
+
+
+tab3<-table(myHealthData$Gender,myHealthData$Orientation)
+prob_tab3<-round(prop.table(tab3,2),2)*100
+barplot(prob_tab3,main="Proportion of people's sexual orientation by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab3),ylim=c(0,70))
+
+barplot(prob_tab2,main="Proportion of people in various levels above the poverty line by sexual orientation gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab3),ylim=c(0,70))
+```
+I have learnt that the percentage of the population above working age that identifies as gay, bisexual. or lesbian is under 4%. This figure was unexpected. I also observed that more women than men identify as not straight. I also found that the proportion of people who identify as gay, lesbian or bisexual is fairly constant across all poverty levels. These observations have interesting repercussions on my research questions.
 ### 7. Bivariate analysis (hypothesis tests and post-hoc tests)
 ```{r 7}
 ```
@@ -59,4 +180,5 @@ str(myData)
 
 ### 9. Save
 ```{r 9}
+save(myHealthData, file = "myHealthData.RDATA")
 ```
