@@ -23,6 +23,7 @@ load("C:/Users/egale/OneDrive - Ashesi University/Desktop/Statistics with Probab
 library(descr)
 library(stats)
 library(dplyr)
+library(ggplot2)
 ```
 
 ### 2. Create variable subset
@@ -65,6 +66,7 @@ myHealthData$Education[myHealthData$EDUC >= 302 & myHealthData$EDUC<=303] <- "As
 myHealthData$Education[myHealthData$EDUC == 400] <- "Bachelor's Degree"
 myHealthData$Education[myHealthData$EDUC == 504] <- "Other Degree"
 myHealthData$Education[myHealthData$EDUC >= 500 & myHealthData$EDUC<=503] <- "Postgraduate"
+
 
 myHealthData$DepressionFrequency <- rep(NA, nrow(myHealthData))
 myHealthData$DepressionFrequency[myHealthData$DEPFREQ == 1] <- "Daily"
@@ -260,7 +262,6 @@ chisq_results
 chisq_results$observed
 chisq_results$expected
 chisq_results$residuals
-stres <- chisq_results$stdres
 ```
 
 To test the relationship between gender and depression levels which are both categorical variables, I conducted a Chi square test of independence. To conduct a Chi square test of independence, I followed these steps:
@@ -402,7 +403,7 @@ The conditions for a Chi-Squared test are met because:
 
 -   Both sexual orientation and depression frequency / depression level are categorical variables.
 
--   The cells in the contingency table are mutually exclusive, i.e. nobody reports that they experience two or more levels of depression, and nobody reports that they are both straight and not straight.
+-   The cells in the contingency table are mutually exclusive, i.e. nobody reports that they experience two or more levels of depression, and nobody reports that they are both straight and not straight. Also, every person belongs to one category or the other.
 
 -   The expected value of all the cells are greater than 5, and no cell has an expected value less than 1.
 
@@ -545,7 +546,7 @@ The type of error that could have been made in this test is a type I error, whic
 
 ### 8. Moderation
 
-```{r 8, fig.height=10, fig.width=20}
+```{r 8}
 
 tab4 <- table(myHealthData$Education ,myHealthData$Gender); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
@@ -555,9 +556,27 @@ tab4 <- table(myHealthData$Education ,myHealthData$Orientation); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
 barplot(prop_tab4,main="Level of education by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige","black"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
 
+
+
 tab4 <- table(myHealthData$PovertyRatio ,myHealthData$Education); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
 barplot(prop_tab4,main="Poverty level by education level",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","black","gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+
+#attempting to view the relationship between sexual orientation and education level, by gender (not working satisfactorily)
+
+myHealthData$Gender <- factor(myHealthData$Gender, levels = c("Female", "Male"))
+
+ggplot(myHealthData, aes(x = myHealthData$Orientation, y = myHealthData$Education, fill = myHealthData$Gender),col="blue") +  geom_boxplot() +   facet_grid(. ~ droplevels.factor(myHealthData$Gender))
+
+#attempting to view the relationship between sexual orientation and poverty level level, by gender (not working satisfactorily)
+
+ggplot(myHealthData, aes(y = myHealthData$PovertyRatio, x = myHealthData$Orientation, fill = myHealthData$Gender)) +
+  geom_point(position = "jitter", alpha = 0.7) +
+  labs(x = "Education Level", y = "Sexual Orientation", fill = "Gender") +
+  scale_fill_manual(values = c("#E69F00", "#56B4E9","red")) +
+  theme_minimal()
+
 ```
 
 ### 9. Save
