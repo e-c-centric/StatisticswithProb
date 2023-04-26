@@ -166,7 +166,7 @@ prob_tab1<-round(prop.table(tab1,2),2)*100; prob_tab1
 barplot(prob_tab1,main="Proportion of people in various levels above the poverty line by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab1),ylim=c(0,70))
 
 tab2<-table(myHealthData$PovertyRatio,myHealthData$Orientation);tab2
-prob_tab2<-round(prop.table(tab2,2),2)*100
+prob_tab2<-round(prop.table(tab2,2),2)*100;prob_tab2
 barplot(prob_tab2,main="Proportion of people in various poverty levels by sexual orientation",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,70))
 
 tab2<-table(myHealthData$Orientation,myHealthData$PovertyRatio);tab2
@@ -475,41 +475,49 @@ H1: There is no association between sexual orientation and poverty level.
 
 Summary of my samples:
 
+```         
 :Distribution of different sexual orientations across different poverty levels (Actual counts)
 
-```         
-                                              Female  Male
+                                                  Not Straight Straight
+  5 units and above the poverty line                      1064    27477
+  Below the poverty line                                  392     8214
+  Between 1 to 1.99 units above the poverty line          590    14637
+  Between 2 to 2.99 units above the poverty line          571    13630
+  Between 3 to 3.99 units above the poverty line          440    11434
+  Between 4 to 4.99 units above the poverty line          361     9740
 ```
 
-5 units and above the poverty line 14400 15097 Below the poverty line 5768 3369 Between 1 to 1.99 units above the poverty line 9500 6450 Between 2 to 2.99 units above the poverty line 8286 6545 Between 3 to 3.99 units above the poverty line 6492 5820 Between 4 to 4.99 units above the poverty line 5486 4916
-
-:Distribution of different sexual orientations across different poverty levels (proportions)
-
 ```         
-                                              Female Male
+:Distribution of different sexual orientations across different poverty levels (proportions)                                              
+                                                 Not Straight Straight
+  5 units and above the poverty line                       31       32
+  Below the poverty line                                   11       10
+  Between 1 to 1.99 units above the poverty line           17       17
+  Between 2 to 2.99 units above the poverty line           17       16
+  Between 3 to 3.99 units above the poverty line           13       13
+  Between 4 to 4.99 units above the poverty line           11       11
 ```
-
-5 units and above the poverty line 29 36 Below the poverty line 12 8 Between 1 to 1.99 units above the poverty line 19 15 Between 2 to 2.99 units above the poverty line 17 16 Between 3 to 3.99 units above the poverty line 13 14 Between 4 to 4.99 units above the poverty line 11 12
 
 The conditions for a Chi-Squared test are met because:
 
-Both poverty level and gender are categorical variables.
+-   Both poverty level and sexual orientation are categorical variables.
 
-The cells in the contingency table are mutually exclusive, i.e. nobody is in more than one poverty level, and nobody reports that they are both male and female.
+-   The cells in the contingency table are mutually exclusive, i.e. nobody is in more than one poverty level, and nobody reports that they are both male and female.
 
-The expected value of all the cells are greater than 5, and no cell has an expected value less than 1.
+-   The expected value of all the cells are greater than 5, and no cell has an expected value less than 1.
 
 Test Statistic (Chi-Square):
 
 ```         
 Pearson's Chi-squared test
+
+data:  myHealthData$PovertyRatio and myHealthData$Orientation
+X-squared = 16.531, df = 5, p-value = 0.005481
 ```
 
-data: myHealthData$PovertyRatio and myHealthData$Gender X-squared = 858.5, df = 5, p-value \< 2.2e-16
+The p-value of the test of the association between poverty level and sexual orientation is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's poverty level and their sexual orientation.
 
-The p-value of the test of the association between poverty level and gender is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's poverty level and their gender.
-
-The type of error that could have been made in this test is a type I error, which occurs when the null hypothesis is rejected when it is actually true. This means that I could have falsely concluded that there is an association between gender and poverty ratio when there is none. The probability of making a type I error is equal to the significance level (alpha) for this test (0.05).
+The type of error that could have been made in this test is a type I error, which occurs when the null hypothesis is rejected when it is actually true. This means that I could have falsely concluded that there is an association between sexual orientation and poverty ratio when there is none. The probability of making a type I error is equal to the significance level (alpha) for this test (0.05).
 
 ### 8. Moderation
 
