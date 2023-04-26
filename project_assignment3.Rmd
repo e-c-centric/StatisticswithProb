@@ -1,7 +1,7 @@
 ---
-title: "Project Assignment 3"
+title: "Project Assignment 4"
 author: "Elikem Asudo Tsatsu Gale-Zoyiku"
-date: "2023-04-01"
+date: "2023-04-26"
 output: word_document
 ---
 
@@ -173,11 +173,11 @@ barplot(prob_tab2,main="Proportion of people in various poverty levels by sexual
 
 tab2<-table(myHealthData$Orientation,myHealthData$PovertyRatio);tab2
 prob_tab2<-round(prop.table(tab2,2),2)*100
-barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,100))
+barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1,col=c("pink","blue","red","green","black","gold"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,100))
 
 tab2<-table(myHealthData$PovertyRatio,myHealthData$Orientation);tab2
 prob_tab2<-round(prop.table(tab2,2),2)*100
-barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,100))
+barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1, col=c("blue","red","green","black","gold","beige"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,100))
 
 tab3<-table(myHealthData$Orientation,myHealthData$Gender);tab3
 prob_tab3<-round(prop.table(tab3,2),2)*100
@@ -546,7 +546,7 @@ The type of error that could have been made in this test is a type I error, whic
 
 ### 8. Moderation
 
-```{r 8}
+```{r 8, , fig.height=15, fig.width=20}
 
 tab4 <- table(myHealthData$Education ,myHealthData$Gender); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
@@ -567,7 +567,11 @@ barplot(prop_tab4,main="Poverty level by education level",ylab="Proportion of Re
 
 myHealthData$Gender <- factor(myHealthData$Gender, levels = c("Female", "Male"))
 
-ggplot(myHealthData, aes(x = myHealthData$Orientation, y = myHealthData$Education, fill = myHealthData$Gender),col="blue") +  geom_boxplot() +   facet_grid(. ~ droplevels.factor(myHealthData$Gender))
+ggplot(myHealthData, aes(y = myHealthData$Education, x = myHealthData$Orientation, fill = myHealthData$Gender)) +
+  geom_point(position = "jitter", alpha = 0.7) +
+  labs(x = "Education Level", y = "Sexual Orientation", fill = "Gender") +
+  scale_fill_manual(values = c("#E69F00", "#56B4E9","red")) +
+  theme_minimal()
 
 #attempting to view the relationship between sexual orientation and poverty level level, by gender (not working satisfactorily)
 
@@ -584,3 +588,27 @@ ggplot(myHealthData, aes(y = myHealthData$PovertyRatio, x = myHealthData$Orienta
 ```{r 9}
 save(myHealthData, file = "myHealthData.RDATA")
 ```
+
+## Summary
+
+The proportion of the population above working age that identifies as gay, bisexual. or lesbian is under 4%. More women than men identify as not straight. Non-straight people seem to be have proportional or greater representation than straight people in the higher levels of education, such as postgraduate, bachelor's degree and some college education. Also, it is very evident that the higher the level of education, the better a person's poverty level.
+
+From the four Chi tests I carried out, I found that:
+
+1.  There is a relationship between gender and depression, as demonstrated by the tests of the association between gender and depression frequency, and gender and depression level. Men reported never feeling depressed more often than women. But among the men and women who reported feeling depressed, more men than women reported being depressed a lot.
+
+2.  There is a relationship between sexual orientation and depression, as demonstrated by the tests of the association between sexual orientation and depression frequency, and sexual orientation and depression level. A greater proportion of people who reported their depression level as "A little" or "Somewhere in between" were not straight.
+
+3.  There is an relationship between a person's poverty level and their sexual orientation, as shown by the test. Fewer non-straight people are in the higher level above the poverty level.
+
+4.  There is an association between between a person's sexual orientation and their educational attainment. A higher proportion of people with college education, some college, or postgraduate degree are not-straight.
+
+There seems to be some credence to my research question, however, my findings now are generalized to non-straight people, instead of specific to men in this category. My findings need to incorporate this parameter to properly answer my research question. Education might have been a lurking variable, but that would be covered by implementing a 3-way categorical plot to examine the relationship between sexual orientation and education level, with gender as a control parameter. This is what I tried to carry out in my moderation chunk, but I need more guidance on how to do this.
+
+The findings of my study so far could have important implications for policy, particularly in the areas of education and mental health. The study revealed that non-straight individuals are more represented in higher education, which suggests that policies aimed at promoting inclusive and supportive environments in education settings could have a positive impact on this group. Such policies might include the provision of safe spaces and support networks, as well as anti-bullying measures that are sensitive to issues around sexual orientation and gender identity.
+
+Additionally, the study found that there is a relationship between sexual orientation and depression, with a greater proportion of non-straight individuals reporting experiencing depression. This suggests that policies aimed at addressing mental health issues among non-straight individuals are needed. Such policies might include targeted mental health support services, awareness campaigns that reduce stigma and promote positive mental health practices, and the development of appropriate screening tools that are sensitive to the unique needs of non-straight individuals.
+
+Furthermore, the study suggests that non-straight individuals are more likely to experience poverty, which suggests that policies aimed at addressing poverty and income inequality could benefit this group. Such policies might include income support programs, access to affordable housing, and employment initiatives that promote equality of opportunity and support diversity in the workplace.
+
+My findings of this study highlight the need for policy initiatives that are sensitive to the unique needs and experiences of non-straight individuals. By addressing issues related to education, mental health, and poverty, policymakers can work towards creating a more inclusive and equitable society for all individuals, regardless of their sexual orientation or gender identity.
