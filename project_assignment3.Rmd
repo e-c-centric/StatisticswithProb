@@ -160,31 +160,35 @@ p<-prop.table(t)*100;p
 
 ### 6. Bivariate tables and graphs
 
-```{r 6}
+```{r 6, fig.height=7.5, fig.width=10}
 tab1<-table(myHealthData$PovertyRatio,myHealthData$Gender);tab1
 prob_tab1<-round(prop.table(tab1,2),2)*100; prob_tab1
-barplot(prob_tab1,main="Proportion of people in various levels above the poverty line by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab1),ylim=c(0,70))
+barplot(prob_tab1,main="Proportion of people in various levels above the poverty line by gender",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","black","gold"), beside = TRUE,legend=row.names(prob_tab1),ylim=c(0,70))
 
 tab2<-table(myHealthData$PovertyRatio,myHealthData$Orientation);tab2
 prob_tab2<-round(prop.table(tab2,2),2)*100;prob_tab2
-barplot(prob_tab2,main="Proportion of people in various poverty levels by sexual orientation",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,70))
+barplot(prob_tab2,main="Proportion of people in various poverty levels by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","black","gold"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,70))
 
 tab2<-table(myHealthData$Orientation,myHealthData$PovertyRatio);tab2
 prob_tab2<-round(prop.table(tab2,2),2)*100
-barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = FALSE,legend=row.names(prob_tab2),ylim=c(0,70))
+barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,100))
+
+tab2<-table(myHealthData$PovertyRatio,myHealthData$Orientation);tab2
+prob_tab2<-round(prop.table(tab2,2),2)*100
+barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,100))
 
 tab3<-table(myHealthData$Orientation,myHealthData$Gender);tab3
 prob_tab3<-round(prop.table(tab3,2),2)*100
-barplot(prob_tab3,main="Proportion of people's sexual orientation by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab3),ylim=c(0,70))
+barplot(prob_tab3,main="Proportion of people's sexual orientation by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab3),ylim=c(0,100))
 
 
 tab4 <- table(myHealthData$DepressionFrequency,myHealthData$Gender); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
-barplot(prop_tab4,main="Proportion of depression frequency by gender",ylab="Proportion of Respondents", las=1, col=c("pink","blue"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+barplot(prop_tab4,main="Proportion of depression frequency by gender",ylab="Proportion of Respondents", las=1, col=c("blue","red","green","black","gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
 
 tab4 <- table(myHealthData$DepressionLevel,myHealthData$Gender); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
-barplot(prop_tab4,main="Proportion of depression level by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+barplot(prop_tab4,main="Proportion of depression level by gender",ylab="Proportion of Respondents", las=1, col=c("green","black","gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
 
 tab4 <- table(myHealthData$DepressionFrequency,myHealthData$Orientation); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
@@ -192,10 +196,22 @@ barplot(prop_tab4,main="Proportion of depression frequency by gender",ylab="Prop
 
 tab4 <- table(myHealthData$DepressionLevel,myHealthData$Orientation); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
-barplot(prop_tab4,main="Proportion of depression level by sexual orientation",ylab="Proportion of Respondents", las=1, col=c(123,"pink",'red'), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+barplot(prop_tab4,main="Proportion of depression level by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink",'red',"gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$Education ,myHealthData$Gender); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Level of education by gender",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige","black"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$Education ,myHealthData$Orientation); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Level of education by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige","black"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$PovertyRatio ,myHealthData$Education); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Poverty level by education level",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","black","gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
 ```
 
-I have learnt that the percentage of the population above working age that identifies as gay, bisexual. or lesbian is under 4%. This figure was unexpected. I also observed that more women than men identify as not straight. I also found that the proportion of people who identify as gay, lesbian or bisexual is fairly constant across all poverty levels. These observations have interesting repercussions on my research questions.
+I have learnt that the percentage of the population above working age that identifies as gay, bisexual. or lesbian is under 4%. This figure was unexpected. I also observed that more women than men identify as not straight. I also found that the proportion of people who identify as gay, lesbian or bisexual is fairly constant across all poverty levels. I observed that non-straight people seem to be have proportional or greater representation than straight people in the higher levels of education, such as postgraduate, bachelor's degree and some college education. Also, it is very evident that the higher the level of education, the higher the person's poverty level. These observations have interesting repercussions on my research questions.
 
 ### 7. Bivariate analysis (hypothesis tests and post-hoc tests)
 
@@ -237,6 +253,14 @@ chisq_results
 chisq_results$observed
 chisq_results$expected
 chisq_results$residuals
+
+
+chisq_results <- chisq.test(myHealthData$PovertyRatio ,myHealthData$Education)
+chisq_results
+chisq_results$observed
+chisq_results$expected
+chisq_results$residuals
+stres <- chisq_results$stdres
 ```
 
 To test the relationship between gender and depression levels which are both categorical variables, I conducted a Chi square test of independence. To conduct a Chi square test of independence, I followed these steps:
@@ -521,7 +545,19 @@ The type of error that could have been made in this test is a type I error, whic
 
 ### 8. Moderation
 
-```{r 8}
+```{r 8, fig.height=10, fig.width=20}
+
+tab4 <- table(myHealthData$Education ,myHealthData$Gender); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Level of education by gender",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige","black"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$Education ,myHealthData$Orientation); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Level of education by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige","black"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$PovertyRatio ,myHealthData$Education); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Poverty level by education level",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","black","gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
 ```
 
 ### 9. Save
