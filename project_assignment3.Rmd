@@ -4,6 +4,7 @@ author: "Elikem Asudo Tsatsu Gale-Zoyiku"
 date: "2023-04-01"
 output: word_document
 ---
+
 ```{r setup, message = FALSE}
 ```
 
@@ -12,9 +13,11 @@ output: word_document
 **Is there an association between the sexual orientation of cis-males, depression levels, and their income? Can education explain any association if there is?**
 
 Explanatory Variables: Gender (Categorical), Sexual Orientation (Categorical), and Educational attainment (categorical)
+
 Response Variables: Depression levels (Categorical), Anxiety levels (Categorical), Ratio of income to poverty level (Categorical)
 
 ### 1. Load data set(s) and libraries
+
 ```{r 1}
 load("C:/Users/egale/OneDrive - Ashesi University/Desktop/Statistics with Probability/IPUMS_NHIS.RData")
 library(descr)
@@ -22,8 +25,8 @@ library(stats)
 library(dplyr)
 ```
 
-
 ### 2. Create variable subset
+
 ```{r 2}
 vars=c("AGE","SEX","SEXORIEN","EDUC","DEPFEELEVL","DEPFREQ","POVERTY","WORFEELEVL","WORFREQ")
 myHealthData = IPUMS_NHIS[vars]
@@ -34,6 +37,7 @@ str(myHealthData)
 ```
 
 ### 3. Data management I: check for and recode errors and NAs
+
 ```{r 3}
 myHealthData$Gender <- rep(NA,nrow(myHealthData))
 myHealthData$Gender[myHealthData$SEX==1] <- 'Male'
@@ -74,7 +78,7 @@ myHealthData$DepressionLevel <- rep(NA, nrow(myHealthData))
 myHealthData$DepressionLevel[myHealthData$DEPFEELEVL == 1] <- "A lot"
 myHealthData$DepressionLevel[myHealthData$DEPFEELEVL== 2] <- "A little"
 myHealthData$DepressionLevel[myHealthData$DEPFEELEVL == 3] <- "Somewhere in between"
-myHealthData$DepressionLevel[myHealthData$DEPFEELEVL == 0] <- "Skipped"
+myHealthData$DepressionLevel[myHealthData$DEPFEELEVL == 0] <- NA
 
 
 myHealthData$WorryFrequency <- rep(NA, nrow(myHealthData))
@@ -89,7 +93,7 @@ myHealthData$WorryLevel <- rep(NA, nrow(myHealthData))
 myHealthData$WorryLevel[myHealthData$WORFEELEVL == 1] <- "A lot"
 myHealthData$WorryLevel[myHealthData$WORFEELEVL== 2] <- "A little"
 myHealthData$WorryLevel[myHealthData$WORFEELEVL == 3] <- "Somewhere in between"
-myHealthData$WorryLevel[myHealthData$WORFEELEVL == 0] <- "Skipped"
+myHealthData$WorryLevel[myHealthData$WORFEELEVL == 0] <- NA
 
 
 myHealthData$PovertyRatio <- rep(NA, nrow(myHealthData))
@@ -103,13 +107,15 @@ myHealthData$PovertyRatio[myHealthData$POVERTY==37] <- "5 units and above the po
 ```
 
 ### 4. Data management II: further subset and create secondary variable
+
 ```{r 4}
 # Subset the data frame to take out observations below the working age
 myHealthData <- myHealthData[myHealthData$WorkingAge == "Working age", ]
 
 ```
 
-### 5. Descriptive statistics (sample means, standard deviations, proportions) and univariate displays
+### 5. Descriptive statistics (sample means, standard deviations, proportions) and uni-variate displays
+
 ```{r 5}
 freq(myHealthData$Gender, ylab="Frequency",xlab="Sex",ylim=c(0,70000),col=c("hotpink","blue"))
 freq(myHealthData$WorkingAge, ylab="Frequency",xlab="Working Age",ylim=c(0,100000),col=c("pink","blue"))
@@ -153,32 +159,365 @@ p<-prop.table(t)*100;p
 ```
 
 ### 6. Bivariate tables and graphs
-```{r 6, fig.height=10, fig.width=10}
-tab1<-table(myHealthData$Gender,myHealthData$PovertyRatio)
-prob_tab1<-round(prop.table(tab1,2),2)*100
+
+```{r 6}
+tab1<-table(myHealthData$PovertyRatio,myHealthData$Gender);tab1
+prob_tab1<-round(prop.table(tab1,2),2)*100; prob_tab1
 barplot(prob_tab1,main="Proportion of people in various levels above the poverty line by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab1),ylim=c(0,70))
 
-tab2<-table(myHealthData$Orientation,myHealthData$PovertyRatio)
+tab2<-table(myHealthData$PovertyRatio,myHealthData$Orientation);tab2
 prob_tab2<-round(prop.table(tab2,2),2)*100
+barplot(prob_tab2,main="Proportion of people in various poverty levels by sexual orientation",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab2),ylim=c(0,70))
 
+tab2<-table(myHealthData$Orientation,myHealthData$PovertyRatio);tab2
+prob_tab2<-round(prop.table(tab2,2),2)*100
+barplot(prob_tab2,main="Proportion of different sexual orientations in the various poverty levels",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = FALSE,legend=row.names(prob_tab2),ylim=c(0,70))
 
-
-tab3<-table(myHealthData$Gender,myHealthData$Orientation)
+tab3<-table(myHealthData$Orientation,myHealthData$Gender);tab3
 prob_tab3<-round(prop.table(tab3,2),2)*100
 barplot(prob_tab3,main="Proportion of people's sexual orientation by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab3),ylim=c(0,70))
 
-barplot(prob_tab2,main="Proportion of people in various levels above the poverty line by sexual orientation gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prob_tab3),ylim=c(0,70))
-```
-I have learnt that the percentage of the population above working age that identifies as gay, bisexual. or lesbian is under 4%. This figure was unexpected. I also observed that more women than men identify as not straight. I also found that the proportion of people who identify as gay, lesbian or bisexual is fairly constant across all poverty levels. These observations have interesting repercussions on my research questions.
-### 7. Bivariate analysis (hypothesis tests and post-hoc tests)
-```{r 7}
+
+tab4 <- table(myHealthData$DepressionFrequency,myHealthData$Gender); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Proportion of depression frequency by gender",ylab="Proportion of Respondents", las=1, col=c("pink","blue"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$DepressionLevel,myHealthData$Gender); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Proportion of depression level by gender",ylab="Proportion of Respondents", las=1, col=c(123,"pink"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$DepressionFrequency,myHealthData$Orientation); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Proportion of depression frequency by gender",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+
+tab4 <- table(myHealthData$DepressionLevel,myHealthData$Orientation); tab4
+prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
+barplot(prop_tab4,main="Proportion of depression level by sexual orientation",ylab="Proportion of Respondents", las=1, col=c(123,"pink",'red'), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
 ```
 
+I have learnt that the percentage of the population above working age that identifies as gay, bisexual. or lesbian is under 4%. This figure was unexpected. I also observed that more women than men identify as not straight. I also found that the proportion of people who identify as gay, lesbian or bisexual is fairly constant across all poverty levels. These observations have interesting repercussions on my research questions.
+
+### 7. Bivariate analysis (hypothesis tests and post-hoc tests)
+
+```{r 7}
+chisq_results <- chisq.test(myHealthData$DepressionFrequency, myHealthData$Gender)
+chisq_results
+chisq_results$observed
+chisq_results$expected
+chisq_results$residuals
+
+
+chisq_results <- chisq.test(myHealthData$DepressionLevel, myHealthData$Gender)
+chisq_results
+chisq_results$observed
+chisq_results$expected
+chisq_results$residuals
+
+chisq_results <- chisq.test(myHealthData$DepressionFrequency, myHealthData$Orientation)
+chisq_results
+chisq_results$observed
+chisq_results$expected
+chisq_results$residuals
+
+
+chisq_results <- chisq.test(myHealthData$DepressionLevel, myHealthData$Orientation)
+chisq_results
+chisq_results$observed
+chisq_results$expected
+chisq_results$residuals
+
+chisq_results <- chisq.test(myHealthData$PovertyRatio, myHealthData$Gender)
+chisq_results
+chisq_results$observed
+chisq_results$expected
+chisq_results$residuals
+
+chisq_results <- chisq.test(myHealthData$PovertyRatio, myHealthData$Orientation)
+chisq_results
+chisq_results$observed
+chisq_results$expected
+chisq_results$residuals
+```
+
+To test the relationship between gender and depression levels which are both categorical variables, I conducted a Chi square test of independence. To conduct a Chi square test of independence, I followed these steps:
+
+1.  I stated the null and alternative hypotheses:
+
+    \
+    Ho: There is no association between gender and depression levels.\
+    H1: There is an association between gender and depression levels.
+
+Summary of my samples:
+
+|        |           |             |           |            |            |
+|--------|-----------|-------------|-----------|------------|------------|
+|        | Daily (%) | Monthly (%) | Never (%) | Rarely (%) | Weekly (%) |
+| Female | 61        | 64          | 49        | 59         | 62         |
+| Male   | 39        | 37          | 51        | 41         | 38         |
+
+: Depression Frequency by Gender
+
+|            |           |             |           |            |            |           |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+|            | **Daily** | **Monthly** | **Never** | **Rarely** | **Weekly** | **Total** |
+| **Female** | 2287      | 4179        | 24215     | 14967      | 3274       | 48922     |
+| **Male**   | 1462      | 2313        | 25150     | 10456      | 2037       | 41418     |
+| **Total**  | 3749      | 6492        | 49365     | 25423      | 5311       | **90340** |
+
+: Depression Frequency by Gender (Actual Counts)
+
+|        |              |           |                          |
+|--------|--------------|-----------|--------------------------|
+|        | A little (%) | A lot (%) | Somewhere in between (%) |
+| Female | 66           | 58        | 62                       |
+| Male   | 34           | 42        | 38                       |
+
+: Depression Level of respondents by Gender
+
+|            |              |           |                          |           |
+|------------|--------------|-----------|--------------------------|-----------|
+|            | **A little** | **A lot** | **Somewhere in between** | **Total** |
+| **Female** | 3498         | 12381     | 9359                     | 25238     |
+| **Male**   | 1839         | 8865      | 5765                     | 16469     |
+| **Total**  | 5337         | 21246     | 15124                    | **41707** |
+
+: Depression Level of respondents by Gender (Actual Counts)
+
+//the counts in this table are less because I took out the respondents who said they had never felt depressed
+
+The conditions for a Chi-Squared test are met because:
+
+-   Both gender and depression frequency / depression level are categorical variables.
+
+-   The cells in the contingency table are mutually exclusive, i.e. nobody reports that they experience two or more levels of depression, and nobody reports that they are both male and female.
+
+-   The expected value of all the cells are greater than 5, and no cell has an expected value less than 1.
+
+Test Statistic (Chi-Square):
+
+-   
+
+    ```         
+    Pearson's Chi-squared test
+
+    data:  myHealthData$DepressionFrequency and myHealthData$Gender
+    X-squared = 1209.2, df = 4, p-value < 2.2e-16
+    ```
+
+-   
+
+    ```         
+    Pearson's Chi-squared test
+
+    data:  myHealthData$DepressionLevel and myHealthData$Gender
+    X-squared = 112.91, df = 2, p-value < 2.2e-16
+    ```
+
+-   The p-value of the test for the association between gender and depression frequency is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's gender and how frequently they experience depression.
+
+-   The p-value of the test for the association between gender and depression level is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's gender and how severe the person's depression is.
+
+-   The type of error that could have been made in this test is a type I error, which occurs when the null hypothesis is rejected when it is actually true. This means that I could have falsely concluded that there is an association between gender and depression when there is none. The probability of making a type I error is equal to the significance level (alpha) for this test (0.05).
+
+I repeated this test four (4) more times for different sets of hypothesis. These are:
+
+**Set 2:**\
+
+To test the relationship between sexual orientation and depression levels which are both categorical variables, I conducted a Chi square test of independence. To conduct a Chi square test of independence, I followed these steps:
+
+I stated the null and alternative hypotheses:
+
+Ho: There is no association between sexual orientation and depression levels.
+
+H1: There is an association between sexual orientation and depression levels.
+
+Summary of my samples:
+
+```         
+Frequency of depression by sexual orientation (actual count)
+
+              Not Straight Straight
+  Daily            313     3281
+  Monthly          493     5831
+  Never           1006    47099
+  Rarely          1079    23772
+  Weekly           513     4634
+```
+
+```         
+Level of depression by sexual orientation (actual count)
+
+                        Not Straight Straight
+  A little                      530     4632
+  A lot                         845    19929
+  Somewhere in between         1056    13653
+```
+
+```         
+Frequency of depression by sexual orientation (proportions)           
+           
+            Not Straight Straight
+  Daily              9        4
+  Monthly           14        7
+  Never             30       56
+  Rarely            32       28
+  Weekly            15        5
+```
+
+```         
+Level of depression by sexual orientation (proportions)      
+      
+                    
+                       Not Straight Straight
+  A little                       22       12
+  A lot                          35       52
+  Somewhere in between           43       36
+```
+
+The conditions for a Chi-Squared test are met because:
+
+-   Both sexual orientation and depression frequency / depression level are categorical variables.
+
+-   The cells in the contingency table are mutually exclusive, i.e. nobody reports that they experience two or more levels of depression, and nobody reports that they are both straight and not straight.
+
+-   The expected value of all the cells are greater than 5, and no cell has an expected value less than 1.
+
+Test Statistic (Chi-Square):
+
+-   
+
+```         
+Pearson's Chi-squared test
+
+data:  myHealthData$DepressionFrequency and myHealthData$Orientation
+X-squared = 1427.4, df = 4, p-value < 2.2e-16
+```
+
+-   
+
+    ```         
+    Pearson's Chi-squared test
+
+    data:  myHealthData$DepressionLevel and myHealthData$Orientation
+    X-squared = 341.47, df = 2, p-value < 2.2e-16
+    ```
+
+-   The p-value of the test of the association between sexual orientation and depression frequency is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's sexual orientation and how frequently they experience depression.
+
+-   The p-value of the test for the association between sexual orientation and depression level is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's sexual orientation and how severe the person's depression is.
+
+-   The type of error that could have been made in this test is a type I error, which occurs when the null hypothesis is rejected when it is actually true. This means that I could have falsely concluded that there is an association between sexual orientation and depression when there is none. The probability of making a type I error is equal to the significance level (alpha) for this test (0.05).
+
+**Set 3:**
+
+\
+To test the relationship between gender and poverty which are both categorical variables, I conducted a Chi square test of independence. To conduct a Chi square test of independence, I followed these steps:
+
+I stated the null and alternative hypotheses:
+
+Ho: There is no association between gender and poverty level.\
+H1: There is an association between gender and poverty level.
+
+Summary of my samples:
+
+```         
+  Distribution of different genders across different poverty levels (Actual counts)
+  
+                                                  Female  Male
+  5 units and above the poverty line              14400 15097
+  Below the poverty line                           5768  3369
+  Between 1 to 1.99 units above the poverty line   9500  6450
+  Between 2 to 2.99 units above the poverty line   8286  6545
+  Between 3 to 3.99 units above the poverty line   6492  5820
+  Between 4 to 4.99 units above the poverty line   5486  4916
+  
+  
+  Distribution of different genders across different poverty levels (proportions)
+  
+                                                  Female Male
+  5 units and above the poverty line                 29   36
+  Below the poverty line                             12    8
+  Between 1 to 1.99 units above the poverty line     19   15
+  Between 2 to 2.99 units above the poverty line     17   16
+  Between 3 to 3.99 units above the poverty line     13   14
+  Between 4 to 4.99 units above the poverty line     11   12
+```
+
+The conditions for a Chi-Squared test are met because:
+
+-   Both poverty level and gender are categorical variables.
+
+-   The cells in the contingency table are mutually exclusive, i.e. nobody is in more than one poverty level, and nobody reports that they are both male and female.
+
+-   The expected value of all the cells are greater than 5, and no cell has an expected value less than 1.
+
+Test Statistic (Chi-Square):
+
+```         
+    Pearson's Chi-squared test
+
+data:  myHealthData$PovertyRatio and myHealthData$Gender
+X-squared = 858.5, df = 5, p-value < 2.2e-16
+```
+
+The p-value of the test of the association between poverty level and gender is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's poverty level and their gender.
+
+The type of error that could have been made in this test is a type I error, which occurs when the null hypothesis is rejected when it is actually true. This means that I could have falsely concluded that there is an association between gender and poverty ratio when there is none. The probability of making a type I error is equal to the significance level (alpha) for this test (0.05).
+
+**Set 4:**\
+
+To test the relationship between sexual orientation and poverty which are both categorical variables, I conducted a Chi square test of independence. To conduct a Chi square test of independence, I followed these steps:
+
+I stated the null and alternative hypotheses:
+
+Ho: There is no association between sexual orientation and poverty level.\
+H1: There is no association between sexual orientation and poverty level.
+
+Summary of my samples:
+
+:Distribution of different sexual orientations across different poverty levels (Actual counts)
+
+```         
+                                              Female  Male
+```
+
+5 units and above the poverty line 14400 15097 Below the poverty line 5768 3369 Between 1 to 1.99 units above the poverty line 9500 6450 Between 2 to 2.99 units above the poverty line 8286 6545 Between 3 to 3.99 units above the poverty line 6492 5820 Between 4 to 4.99 units above the poverty line 5486 4916
+
+:Distribution of different sexual orientations across different poverty levels (proportions)
+
+```         
+                                              Female Male
+```
+
+5 units and above the poverty line 29 36 Below the poverty line 12 8 Between 1 to 1.99 units above the poverty line 19 15 Between 2 to 2.99 units above the poverty line 17 16 Between 3 to 3.99 units above the poverty line 13 14 Between 4 to 4.99 units above the poverty line 11 12
+
+The conditions for a Chi-Squared test are met because:
+
+Both poverty level and gender are categorical variables.
+
+The cells in the contingency table are mutually exclusive, i.e. nobody is in more than one poverty level, and nobody reports that they are both male and female.
+
+The expected value of all the cells are greater than 5, and no cell has an expected value less than 1.
+
+Test Statistic (Chi-Square):
+
+```         
+Pearson's Chi-squared test
+```
+
+data: myHealthData$PovertyRatio and myHealthData$Gender X-squared = 858.5, df = 5, p-value \< 2.2e-16
+
+The p-value of the test of the association between poverty level and gender is significantly less than 0.05, so I have sufficient evidence to reject my null hypothesis. This implies that there is an association between a person's poverty level and their gender.
+
+The type of error that could have been made in this test is a type I error, which occurs when the null hypothesis is rejected when it is actually true. This means that I could have falsely concluded that there is an association between gender and poverty ratio when there is none. The probability of making a type I error is equal to the significance level (alpha) for this test (0.05).
+
 ### 8. Moderation
+
 ```{r 8}
 ```
 
 ### 9. Save
+
 ```{r 9}
 save(myHealthData, file = "myHealthData.RDATA")
 ```
