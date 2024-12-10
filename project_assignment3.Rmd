@@ -118,7 +118,7 @@ myHealthData <- myHealthData[myHealthData$WorkingAge == "Working age", ]
 
 ### 5. Descriptive statistics (sample means, standard deviations, proportions) and uni-variate displays
 
-```{r 5}
+```{r 5, fig.height=7.5, fig.width=10}
 freq(myHealthData$Gender, ylab="Frequency",xlab="Sex",ylim=c(0,70000),col=c("hotpink","blue"))
 freq(myHealthData$WorkingAge, ylab="Frequency",xlab="Working Age",ylim=c(0,100000),col=c("pink","blue"))
 freq(myHealthData$Orientation,ylab="Frequency",xlab="Sexual Orientation",ylim=c(0,100000), col = c("blue","yellow"))
@@ -162,7 +162,7 @@ p<-prop.table(t)*100;p
 
 ### 6. Bivariate tables and graphs
 
-```{r 6, fig.height=7.5, fig.width=10}
+```{r 6}
 tab1<-table(myHealthData$PovertyRatio,myHealthData$Gender);tab1
 prob_tab1<-round(prop.table(tab1,2),2)*100; prob_tab1
 barplot(prob_tab1,main="Proportion of people in various levels above the poverty line by gender",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","black","gold"), beside = TRUE,legend=row.names(prob_tab1),ylim=c(0,70))
@@ -190,7 +190,7 @@ barplot(prop_tab4,main="Proportion of depression frequency by gender",ylab="Prop
 
 tab4 <- table(myHealthData$DepressionLevel,myHealthData$Gender); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
-barplot(prop_tab4,main="Proportion of depression level by gender",ylab="Proportion of Respondents", las=1, col=c("green","black","gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+barplot(prop_tab4,main="Proportion of depression level by gender",ylab="Proportion of Respondents", las=1, col=c("green","black","gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,100))
 
 tab4 <- table(myHealthData$DepressionFrequency,myHealthData$Orientation); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
@@ -198,7 +198,7 @@ barplot(prop_tab4,main="Proportion of depression frequency by gender",ylab="Prop
 
 tab4 <- table(myHealthData$DepressionLevel,myHealthData$Orientation); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
-barplot(prop_tab4,main="Proportion of depression level by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink",'red',"gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+barplot(prop_tab4,main="Proportion of depression level by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink",'red',"gold"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,100))
 
 tab4 <- table(myHealthData$Education ,myHealthData$Gender); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
@@ -206,7 +206,7 @@ barplot(prop_tab4,main="Level of education by gender",ylab="Proportion of Respon
 
 tab4 <- table(myHealthData$Education ,myHealthData$Orientation); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
-barplot(prop_tab4,main="Level of education by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige","black"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,70))
+barplot(prop_tab4,main="Level of education by sexual orientation",ylab="Proportion of Respondents", las=1, col=c("pink","blue","red","green","beige","black"), beside = TRUE,legend=row.names(prop_tab4),ylim=c(0,100))
 
 tab4 <- table(myHealthData$PovertyRatio ,myHealthData$Education); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
@@ -546,7 +546,7 @@ The type of error that could have been made in this test is a type I error, whic
 
 ### 8. Moderation
 
-```{r 8, , fig.height=15, fig.width=20}
+```{r 8, fig.height=7.5, fig.width=10}
 
 tab4 <- table(myHealthData$Education ,myHealthData$Gender); tab4
 prop_tab4 <- round(prop.table(tab4,2),2)*100; prop_tab4
@@ -576,9 +576,8 @@ ggplot(myHealthData, aes(y = myHealthData$Education, x = myHealthData$Orientatio
 #attempting to view the relationship between sexual orientation and poverty level level, by gender (not working satisfactorily)
 
 ggplot(myHealthData, aes(y = myHealthData$PovertyRatio, x = myHealthData$Orientation, fill = myHealthData$Gender)) +
-  geom_point(position = "jitter", alpha = 0.7) +
+  geom_point(alpha = 0.7) +
   labs(x = "Education Level", y = "Sexual Orientation", fill = "Gender") +
-  scale_fill_manual(values = c("#E69F00", "#56B4E9","red")) +
   theme_minimal()
 
 ```
